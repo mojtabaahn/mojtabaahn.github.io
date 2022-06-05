@@ -94,6 +94,7 @@ const OpenSource = () => (
         <div className="grid md:grid-cols-2 gap-5 py-5">
             <OpenSourceItem name='PHP Persian Numbers' description='Number utilities for persian language' href='https://github.com/mojtabaahn/php-persian-number-to-words'/>
             <OpenSourceItem name='Laravel Web Logs' description='View Laravel logs in browser' href='https://github.com/mojtabaahn/laravel-web-logs'/>
+            <OpenSourceItem name='Fast Validate' description='Easy Data Validation For Python & Pydantic' href='https://github.com/mojtabaahn/fast-validate'/>
         </div>
     </div>
 )
