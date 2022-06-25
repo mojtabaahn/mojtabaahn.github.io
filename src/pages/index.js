@@ -1,9 +1,15 @@
-import * as React from "react"
-import {useEffect} from "react";
+import {useEffect} from "react"
 import {navigate} from "gatsby";
 
 
-export default () => {
-    useEffect(async () => await navigate('/cv'), [])
+const Index = () => {
+    useEffect(() => {
+        async function redirect() {
+            return await navigate('/blog');
+        }
+
+        redirect()
+    }, [])
     return null
 }
+export default Index
