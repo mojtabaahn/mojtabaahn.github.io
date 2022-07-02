@@ -5,3 +5,7 @@
 a {
     @apply hover:text-red-500
 }
+
+.prose img{
+    @apply mx-auto;
+}
