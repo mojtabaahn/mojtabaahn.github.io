@@ -40,7 +40,7 @@ a {
 
 .gatsby-highlight pre[class*="language-"].line-numbers {
     @apply pl-16 py-4 !important;
-    overflow: initial;
+    /*overflow: initial;*/
 }
 
 .line-numbers-rows {
