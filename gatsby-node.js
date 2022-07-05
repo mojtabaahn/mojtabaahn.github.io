@@ -3,18 +3,23 @@ const path = require('path')
 exports.createPages = async ({graphql, actions}) => {
     const {data} = await graphql(`
         {
-          allMdx {
+          allMarkdownRemark {
             nodes {
               id
-              slug
+              parent {
+                ... on File {
+                  id
+                  name
+                }
+              }
             }
           }
         }
     `)
 
-    data.allMdx.nodes.forEach(node => {
+    data.allMarkdownRemark.nodes.forEach(node => {
         actions.createPage({
-            path: '/' + node.slug,
+            path: '/' + node.parent.name,
             component: path.resolve('./src/pages/blog/item.js'),
             context: {id: node.id}
         })

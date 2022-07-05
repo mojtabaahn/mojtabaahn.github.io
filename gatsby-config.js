@@ -5,19 +5,27 @@ module.exports = {
     },
     plugins: [
         'gatsby-plugin-postcss',
-        {
-            resolve: 'gatsby-plugin-google-analytics',
-            options: {
-                "trackingId": "HelloWorld"
-            }
-        },
+        // {
+        //     resolve: 'gatsby-plugin-google-analytics',
+        //     options: {
+        //         "trackingId": "HelloWorld"
+        //     }
+        // },
         "gatsby-plugin-image",
         "gatsby-plugin-react-helmet",
         "gatsby-plugin-sitemap",
-        "gatsby-plugin-mdx",
-        "gatsby-transformer-remark",
+        // "gatsby-plugin-mdx",
+        {
+            resolve: "gatsby-transformer-remark",
+            options: {
+                plugins : [
+                    'gatsby-remark-prismjs'
+                ]
+            }
+        },
         "gatsby-plugin-sharp",
         "gatsby-transformer-sharp",
+        'gatsby-plugin-mdx-frontmatter',
         {
             resolve: 'gatsby-source-filesystem',
             options: {

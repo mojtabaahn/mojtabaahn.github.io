@@ -6,19 +6,25 @@ import {useState} from "react";
 
 const OpenSourceIndex = () => {
     const data = useStaticQuery(graphql`
-        query {
-          allMdx(sort: {order: DESC, fields: slug}) {
+        {
+          allMarkdownRemark(sort: {order: DESC, fields: fileAbsolutePath}) {
             nodes {
+              id
+              parent {
+                ... on File {
+                  id
+                  name
+                }
+              }
               frontmatter {
                 title
               }
-              slug
             }
           }
         }
     `)
 
-    let entries = data.allMdx.nodes
+    let entries = data.allMarkdownRemark.nodes
 
     return (
         <Layout>
@@ -53,11 +59,11 @@ const Entry = ({entry, index}) => {
         <Link
             onMouseEnter={mouse_over_callback}
             onMouseLeave={mouse_leave_callback}
-            to={'/' + entry.slug}
+            to={'/' + entry.parent.name}
             className="py-6"
         >
             <div className='text-xl'>
-                <div className={'rounded text-white font-bold inline-block px-2 mr-1 ' + `${entered ? 'bg-red-500' : 'bg-gray-900'}`}>{('0000' + index).slice(-2)}</div>
+                <div className={`rounded text-white font-bold inline-block px-2 mr-1 ${entered ? 'bg-red-500' : 'bg-gray-900'}`}>{('0000' + index).slice(-2)}</div>
                 <div className='inline-block'>{entry.frontmatter.title}</div>
             </div>
         </Link>

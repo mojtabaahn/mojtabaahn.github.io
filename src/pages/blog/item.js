@@ -1,11 +1,10 @@
 import * as React from "react"
 import {Contain, Layout} from "../../layouts/layout";
 import {graphql} from "gatsby";
-import {MDXRenderer} from "gatsby-plugin-mdx";
 import Seo from "../../layouts/seo";
 
 const BlogEntry = ({data}) => {
-    const title = data.mdx.frontmatter.title
+    const title = data.markdownRemark.frontmatter.title
     return (
         <Layout>
             <Seo title={title}/>
@@ -15,8 +14,7 @@ const BlogEntry = ({data}) => {
                     <span className='relative'>{title}</span>
                 </h1>
                 <div className="py-6">
-                    <div className='leading-10 prose lg:prose-lg max-w-full'>
-                        <MDXRenderer>{data.mdx.body}</MDXRenderer>
+                    <div className='leading-10 prose lg:prose-lg max-w-full' dangerouslySetInnerHTML={{__html: data.markdownRemark.html}}>
                     </div>
                 </div>
             </Contain>
@@ -26,12 +24,11 @@ const BlogEntry = ({data}) => {
 
 export const query = graphql`
     query($id: String) {
-      mdx(id: {eq: $id}) {
+      markdownRemark(id: {eq: $id}) {
         frontmatter {
           title
         }
-        slug
-        body
+        html
       }
     }
 `

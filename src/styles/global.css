@@ -1,3 +1,7 @@
+/*@import "./prism.css";*/
+@import "~prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import "~prismjs/themes/prism-tomorrow.min.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +10,39 @@ a {
     @apply hover:text-red-500
 }
 
-.prose img{
+.prose img {
     @apply mx-auto;
+}
+
+.prose strong {
+    @apply border-b border-yellow-500 font-bold text-black
+}
+
+.prose em {
+    @apply font-normal text-black
+}
+
+.prose a {
+    @apply font-normal text-red-500 no-underline hover:text-red-600
+}
+
+.prose code.language-text:before, .prose code.language-text:after {
+    content: '';
+}
+
+.prose code.language-text {
+    @apply bg-gray-50 inline-block px-2 font-semibold text-black
+}
+
+:not(pre) > code[class*=language-], pre[class*=language-] {
+    @apply bg-gray-800
+}
+
+.gatsby-highlight pre[class*="language-"].line-numbers {
+    @apply pl-16 py-4 !important;
+    overflow: initial;
+}
+
+.line-numbers-rows {
+    @apply pl-3 py-4 border-r-gray-900 !important
 }
