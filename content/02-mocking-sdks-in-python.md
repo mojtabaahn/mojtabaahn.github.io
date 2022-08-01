@@ -67,7 +67,7 @@ This seems legit, but this test has some serious problems:
 
 ### Getting shit together
 Mocking is not something new in testing concepts. but I find it miraculous. It is the savior.
-So we know we don't want a real HTTP request to *Payment Microservice*. but how can we make it happen without editing our controller?
+So we know we don't want a real [HTTP](https://www.scaler.com/topics/hypertext-transfer-protocol/) request to *Payment Microservice*. but how can we make it happen without editing our controller?
 
 [MagicMock](https://docs.python.org/3/library/unittest.mock.html#unittest.mock.MagicMock) is python's standard way to mocking functions and methods.
 all we need to do is instantiate a _MagicMock_ with a desired return value and assign it to object property we want:
