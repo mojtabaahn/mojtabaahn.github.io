@@ -47,7 +47,7 @@ const Entry = ({entry, index}) => {
     return (
     	<div>
 			<h1 className="text-5xl relative inline-block">
-				<span className="rounded-full absolute left-0 bottom-[-40px] lg:bottom-[-6px] h-2 w-full bg-gradient-to-r from-red-500 to-pink-500"></span>
+				<span className="rounded-full absolute left-0 bottom-[-6px] h-2 w-full bg-gradient-to-r from-red-500 to-pink-500"></span>
 				<span className='relative'>{entry.frontmatter.title}</span>
 			</h1>
 			<div className="pt-6">
