@@ -2,7 +2,7 @@ import * as React from "react"
 import {Link} from "gatsby";
 
 export const Contain = ({children, className}) => (
-    <div className={'w-full max-w-6xl mx-auto px-5 ' + className}>
+    <div className={'w-full max-w-4xl mx-auto px-5 ' + className}>
         {children}
     </div>
 )

@@ -5,7 +5,7 @@ import {navigate} from "gatsby";
 const Index = () => {
     useEffect(() => {
         async function redirect() {
-            return await navigate('/blog');
+            return await navigate('/feed');
         }
 
         redirect()
