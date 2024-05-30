@@ -67,14 +67,17 @@ const Experience = () => (
     <div>
         <div className="border-b-2 text-2xl border-black">Experience</div>
         <div className="grid gap-5 py-5">
-            <ExperienceItem span='1397 — 1399' href='https://arcademy.ir' company='Arcademy.ir' position='Co-Founder & Software Developer'>
-                Arcademy is an e-learning platform founded by Amirhosein Abdollahzadeh, Mohammad Fani and I. The website had 3 major releases, All backed by Laravel framework. Our front-end implementation started with SASS and custom styles on first and second version. Our final - current - version utilized Vue.js and Inertia.js for front-end and TailwindCSS for styling. Major technical challenges we faced these years were related to tech-stack selection, methods of maintenance and development of source code, data caching for better response time, implementing integrated CRM and CMS, and better UX.
+            <ExperienceItem span='2024 — Now' href='https://basalam.com' company='Basalam.com' position='DevOps Engineer'>
+                As a DevOps Engineer with much experience in "Dev" part my major mission is to bring automation as much as possible to manual "Ops" parts. This includes making a SAAS for developers to minimize ops demands among developers.
             </ExperienceItem>
-            <ExperienceItem span='1399 — 1400' href='https://citek.ir' company='Citek.ir' position='Software Developer'>
+            <ExperienceItem span='2020 — 2024' href='https://basalam.com' company='Basalam.com' position='Software Developer'>
+                Basalam is an e-commerce platform in retail market. Migration from monolithic to microservices was a major challenge as I entered the company. the legacy project stack was PHP/Laravel with GraphQL interface. Initially I've migrated the authentication and authorization logics to a separate microservice with PHP/Laravel/Passport stack named Auth. Later I've migrated basket management logics to a new service with Python/FastAPI backed service named Order. Main challenges we faced was communication between services after migration to microservices, optimising response time, asynchronous programming, load tests, unit testings and developing a framework on top of FastAPI and 10+ packages for better maintainability and scalability concerns.
+            </ExperienceItem>
+            <ExperienceItem span='2019 — 2020' href='https://citek.ir' company='Citek.ir' position='Software Developer'>
                 Citek group is a software development company that works on client and its own projects. in about 6 months we worked together I developed a delivery startup software using Laravel, Livewire and tailwindcss.
             </ExperienceItem>
-            <ExperienceItem span='1400 — Now' href='https://basalam.com' company='Basalam.com' position='Software Developer'>
-                Basalam is an e-commerce platform in retail market. Migration from monolithic to microservices was a major challenge as I entered the company. the legacy project stack was PHP/Laravel with GraphQL interface. Initially I've migrated the authentication and authorization logics to a separate microservice with PHP/Laravel/Passport stack named Auth. Later I've migrated basket management logics to a new service with Python/FastAPI backed service named Order. Main challenges we faced was communication between services after migration to microservices, optimising response time, asynchronous programming, load tests, unit testings and developing a framework on top of FastAPI and 10+ packages for better maintainability and scalability concerns.
+            <ExperienceItem span='2017 — 2019' href='https://arcademy.ir' company='Arcademy.ir' position='Co-Founder & Software Developer'>
+                Arcademy is an e-learning platform founded by Amirhosein Abdollahzadeh, Mohammad Fani and I. The website had 3 major releases, All backed by Laravel framework. Our front-end implementation started with SASS and custom styles on first and second version. Our final - current - version utilized Vue.js and Inertia.js for front-end and TailwindCSS for styling. Major technical challenges we faced these years were related to tech-stack selection, methods of maintenance and development of source code, data caching for better response time, implementing integrated CRM and CMS, and better UX.
             </ExperienceItem>
         </div>
     </div>
@@ -92,8 +95,9 @@ const OpenSource = () => (
     <div>
         <div className="border-b-2 text-2xl border-black">Open Source</div>
         <div className="grid md:grid-cols-2 gap-5 py-5">
+            <OpenSourceItem name='Persian Simple Icons' description='Like "Simple Icons" but for persian brands' href='https://github.com/mojtabaahn/persian-simple-icons'/>
             <OpenSourceItem name='PHP Persian Numbers' description='Number utilities for persian language' href='https://github.com/mojtabaahn/php-persian-number-to-words'/>
-            <OpenSourceItem name='Laravel Web Logs' description='View Laravel logs in browser' href='https://github.com/mojtabaahn/laravel-web-logs'/>
+            <OpenSourceItem name='Laravel Web Logs' description='[Archived] View Laravel logs in browser' href='https://github.com/mojtabaahn/laravel-web-logs'/>
             <OpenSourceItem name='Fast Validate' description='Easy Data Validation For Python & Pydantic' href='https://github.com/mojtabaahn/fast-validate'/>
         </div>
     </div>
