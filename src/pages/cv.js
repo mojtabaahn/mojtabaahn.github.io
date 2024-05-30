@@ -52,10 +52,10 @@ const Education = () => (
     <div>
         <div className="border-b-2 text-2xl border-black">Education</div>
         <div className="grid gap-5 py-5">
-            <EducationItem span='2008 — 2015' school='Shahid Qodosi' location='Qom, Iran'
-                           details='High School Diploma in Math'/>
             <EducationItem span='2015 — 2020' school='University Of Mazandaran' location='Babolsar, Iran'
                            details='Bachelor Of Science In Computer Engineering'/>
+            <EducationItem span='2008 — 2015' school='Shahid Qodosi' location='Qom, Iran'
+                           details='High School Diploma in Math'/>
         </div>
     </div>
 )
