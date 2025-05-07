@@ -1,0 +1,136 @@
+Name: Mojtabaa Habibian
+Title: Software Developer & DevOps Engineer
+
+Professional Summary:
+Experienced Software Developer and DevOps Engineer with a strong track record in microservices architecture, cloud infrastructure, and full-stack development. Specialized in Python/FastAPI and PHP/Laravel ecosystems, with proven expertise in system design, performance optimization, and building scalable applications. Demonstrated success in leading technical migrations, developing open-source tools, and implementing automation solutions that enhance development workflows and operational efficiency.
+
+Technical Skills:
+- Languages
+  * Python
+  * PHP
+  * JavaScript/TypeScript
+  * SQL
+
+- Backend Frameworks & Tools
+  * FastAPI
+  * Laravel
+  * GraphQL
+  * REST APIs
+  * Redis
+  * PostgreSQL
+  * MySQL
+  * PyPika
+  * Pydantic
+  * Passport
+
+- Frontend Technologies
+  * Vue.js
+  * Inertia.js
+  * TailwindCSS
+  * SASS
+  * Livewire
+
+- DevOps & Infrastructure
+  * Docker
+  * Kubernetes
+  * CI/CD
+  * GitLab CI
+  * Microservices Architecture
+  * Performance Optimization
+  * Load Testing
+  * Unit Testing
+
+Projects:
+- MailPal (2015-2016)
+  * University prototype project
+  * SMTP server interface implementation
+  * Built with Python and networking libraries
+
+- Arcademy (2017-2019)
+  * Co-founded e-learning platform for software development
+  * Full-stack development with Laravel, Vue.js, and Inertia.js
+  * Implemented integrated CRM and CMS systems
+  * Website: arcademy.ir
+
+- Septash (2019-2020)
+  * Network monitoring dashboard for multi-location servers
+  * Real-time upload/download monitoring
+  * Advanced IP address filtering and analytics
+  * Built with Python and modern web technologies
+
+- Basalam Microservices (2020-Present)
+  * Order Microservice
+    - Migrated from monolithic Laravel to Python/FastAPI
+    - Implemented basket management and order processing
+    - Optimized for high-performance and scalability
+  
+  * Auth Microservice
+    - Migrated authentication system from monolithic Laravel
+    - Implemented OAuth2 with Laravel Passport
+    - Enhanced security and user management
+  
+  * Accounting & Financial Microservice
+    - Built from scratch with Python/FastAPI
+    - Handles financial transactions and reporting
+    - Integrated with payment gateways
+  
+  * Contrax Microservice
+    - Built from scratch for handling contradictions
+    - Implemented complex business logic
+    - Optimized for real-time processing
+  
+  * Titan (Internal PaaS & DBaaS)
+    - Built from scratch for internal automation
+    - Platform as a Service for development teams
+    - Database as a Service for automated DB management
+    - Reduced operational overhead and improved efficiency
+
+Contact Info:
+- Phone: (+98) 933 462-6112
+- Email: mojtabaa.hn@gmail.com
+- Location: Qom, Iran
+- Website: mojtabaahn.github.io
+- Github: github.com/mojtabaahn
+- LinkedIn: linkedin.com/in/mojtabaahn
+
+Education:
+- 2015 — 2020: University Of Mazandaran — Babolsar, Iran
+  Bachelor Of Science In Computer Engineering
+- 2008 — 2015: Shahid Qodosi — Qom, Iran
+  High School Diploma in Math
+
+Experience:
+- 2024 — Now: Basalam.com, DevOps Engineer
+  As a DevOps Engineer with much experience in "Dev" part my major mission is to bring automation as much as possible to manual "Ops" parts. This includes making a SAAS for developers to minimize ops demands among developers.
+- 2020 — 2024: Basalam.com, Software Developer
+  Basalam is an e-commerce platform in retail market. Migration from monolithic to microservices was a major challenge as I entered the company. the legacy project stack was PHP/Laravel with GraphQL interface. Initially I've migrated the authentication and authorization logics to a separate microservice with PHP/Laravel/Passport stack named Auth. Later I've migrated basket management logics to a new service with Python/FastAPI backed service named Order. Main challenges we faced was communication between services after migration to microservices, optimising response time, asynchronous programming, load tests, unit testings and developing a framework on top of FastAPI and 10+ packages for better maintainability and scalability concerns.
+- 2019 — 2020: Citek.ir, Software Developer
+  Citek group is a software development company that works on client and its own projects. in about 6 months we worked together I developed a delivery startup software using Laravel, Livewire and tailwindcss.
+- 2017 — 2019: Arcademy.ir, Co-Founder & Software Developer
+  Arcademy is an e-learning platform founded by Amirhosein Abdollahzadeh, Mohammad Fani and I. The website had 3 major releases, All backed by Laravel framework. Our front-end implementation started with SASS and custom styles on first and second version. Our final - current - version utilized Vue.js and Inertia.js for front-end and TailwindCSS for styling. Major technical challenges we faced these years were related to tech-stack selection, methods of maintenance and development of source code, data caching for better response time, implementing integrated CRM and CMS, and better UX.
+
+Open Source:
+- persian-simple-icons: github.com/mojtabaahn/persian-simple-icons
+  Like "Simple Icons" but for persian brands
+- php-persian-number-to-words: github.com/mojtabaahn/php-persian-number-to-words
+  Number utilities for persian language
+- laravel-web-logs (Archived): github.com/mojtabaahn/laravel-web-logs
+  View Laravel logs in browser
+- fast-validate: github.com/mojtabaahn/fast-validate
+  Easy Data Validation For Python & Pydantic
+- backbone-orm: github.com/basalam/backbone-orm
+  A lightweight, asynchronous Object-Relational Mapper (ORM) for Python, built on top of PyPika SQL query builder
+- backbone-translation: github.com/basalam/backbone-translation
+  A Python library for handling translations with support for JSON file loading and string interpolation
+- backbone-redis-cache: github.com/basalam/backbone-redis-cache
+  A Redis caching library for Python applications with support for connection pooling and cache management
+
+Posts:
+- Coding And Conventions: Part 1
+  An article about coding guidelines and their importance in large organizations, covering common categories and best practices
+- Fast Validate
+  A technical article about implementing Laravel-style form validation in Python using Pydantic models
+- Mocking SDKs in Python
+  A guide on test isolation in Python, focusing on unit & integration testing practices and reducing side effects
+- Hello World
+  An introduction to the blog, discussing the motivation behind starting it and future content plans
