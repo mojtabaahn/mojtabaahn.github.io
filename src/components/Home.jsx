@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import dataset from '../dataset.yaml';
 import { marked } from 'marked';
+import cvImage from '../assets/cv-image.png';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas-pro';
 import {
   Briefcase,
   GraduationCap,
@@ -18,51 +21,56 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  Monitor
+  Monitor,
+  Download
 } from 'lucide-react';
 
 const Home = () => {
   const [data, setData] = useState(null);
   const [activeSection, setActiveSection] = useState('about');
-  const [theme, setTheme] = useState('system');
+  // Initialize theme from localStorage or default to 'system'
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'system';
+    }
+    return 'system';
+  });
   const sectionRefs = useRef({});
 
+  // Apply theme immediately on initial render
   useEffect(() => {
-    // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('theme') || 'system';
-    setTheme(savedTheme);
-  }, []);
+    const applyTheme = (currentTheme) => {
+      if (currentTheme === 'system') {
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', systemPrefersDark);
+      } else {
+        document.documentElement.classList.toggle('dark', currentTheme === 'dark');
+      }
+    };
+
+    // Apply theme immediately
+    applyTheme(theme);
+
+    // Save preference to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', theme);
+    }
+  }, [theme]);
 
   useEffect(() => {
     // Handle system preference changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleSystemThemeChange = (e) => {
       if (theme === 'system') {
         document.documentElement.classList.toggle('dark', e.matches);
       }
     };
 
-    // Initial check
-    handleSystemThemeChange(mediaQuery);
-
     // Listen for changes
     mediaQuery.addEventListener('change', handleSystemThemeChange);
 
     return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
-  }, [theme]);
-
-  useEffect(() => {
-    // Update theme based on selection
-    if (theme === 'system') {
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', systemPrefersDark);
-    } else {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-    }
-
-    // Save preference to localStorage
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const cycleTheme = () => {
@@ -73,6 +81,154 @@ const Home = () => {
         default: return 'light';
       }
     });
+  };
+
+  const exportToPDF = async () => {
+    let originalContent = null;
+    let originalDarkClass = false;
+    const exportButton = document.querySelector('[aria-label="Export to PDF"]');
+
+    try {
+      // Show loading state
+      originalContent = exportButton?.innerHTML;
+      if (exportButton) {
+        exportButton.innerHTML = '<span class="animate-pulse">Generating PDF...</span>';
+        exportButton.disabled = true;
+      }
+
+      // Hide elements we don't want in PDF
+      const nav = document.querySelector('nav');
+      const footer = document.querySelector('footer');
+      const decorativeElements = document.querySelector('.fixed.inset-0');
+      const blogSection = document.querySelector('#blog');
+
+      if (nav) nav.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+      if (decorativeElements) decorativeElements.style.display = 'none';
+      if (blogSection) blogSection.style.display = 'none';
+
+      // Force light mode for PDF
+      const htmlElement = document.documentElement;
+      originalDarkClass = htmlElement.classList.contains('dark');
+      htmlElement.classList.remove('dark');
+
+      // Wait for theme change to apply
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Get the entire page content
+      const pageElement = document.getElementById('root');
+
+      // Remove gradient from title for cleaner PDF
+      const gradientElements = pageElement.querySelectorAll('.bg-gradient-to-r');
+      const originalStyles = [];
+      gradientElements.forEach((el, index) => {
+        originalStyles[index] = {
+          background: el.style.background,
+          webkitBackgroundClip: el.style.webkitBackgroundClip,
+          backgroundClip: el.style.backgroundClip,
+          webkitTextFillColor: el.style.webkitTextFillColor,
+          color: el.style.color
+        };
+        el.style.background = 'none';
+        el.style.webkitBackgroundClip = 'unset';
+        el.style.backgroundClip = 'unset';
+        el.style.webkitTextFillColor = 'unset';
+        el.style.color = '#3b82f6'; // Blue color
+      });
+
+      // Generate canvas with html2canvas-pro which supports oklch
+      const canvas = await html2canvas(pageElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: 1200,
+        width: 1200,
+        height: pageElement.scrollHeight,
+        // html2canvas-pro specific options
+        ignoreElements: (element) => {
+          // Ignore hidden elements
+          return element.classList?.contains('print:hidden') ||
+                 element.style?.display === 'none';
+        }
+      });
+
+      // Calculate PDF dimensions - full width
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Create PDF with custom height to fit all content
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: [imgWidth, imgHeight]
+      });
+
+      // Add the image to PDF - edge to edge
+      const imgData = canvas.toDataURL('image/png');
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+
+      // Save the PDF
+      pdf.save(`${data.name.replace(' ', '_')}_CV.pdf`);
+
+      // Restore gradient styles
+      gradientElements.forEach((el, index) => {
+        const original = originalStyles[index];
+        if (original) {
+          el.style.background = original.background || '';
+          el.style.webkitBackgroundClip = original.webkitBackgroundClip || '';
+          el.style.backgroundClip = original.backgroundClip || '';
+          el.style.webkitTextFillColor = original.webkitTextFillColor || '';
+          el.style.color = original.color || '';
+        }
+      });
+
+      // Restore everything
+      if (nav) nav.style.display = '';
+      if (footer) footer.style.display = '';
+      if (decorativeElements) decorativeElements.style.display = '';
+      if (blogSection) blogSection.style.display = '';
+
+      if (originalDarkClass) {
+        htmlElement.classList.add('dark');
+      }
+
+      if (exportButton) {
+        exportButton.innerHTML = originalContent;
+        exportButton.disabled = false;
+      }
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+
+      // Restore everything on error
+      const nav = document.querySelector('nav');
+      const footer = document.querySelector('footer');
+      const decorativeElements = document.querySelector('.fixed.inset-0');
+      const blogSection = document.querySelector('#blog');
+      const htmlElement = document.documentElement;
+
+      if (nav) nav.style.display = '';
+      if (footer) footer.style.display = '';
+      if (decorativeElements) decorativeElements.style.display = '';
+      if (blogSection) blogSection.style.display = '';
+
+      if (originalDarkClass) {
+        htmlElement.classList.add('dark');
+      }
+
+      if (exportButton) {
+        if (originalContent) {
+          exportButton.innerHTML = originalContent;
+        } else {
+          exportButton.innerHTML = '<span>Export PDF</span>';
+        }
+        exportButton.disabled = false;
+      }
+
+      alert('Error generating PDF. Please try using the browser print function (Cmd/Ctrl + P) instead.');
+    }
   };
 
   useEffect(() => {
@@ -150,7 +306,7 @@ const Home = () => {
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen relative transition-colors duration-200 font-sans">
       {/* Background decorative elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden print:hidden">
         {/* Main blobs */}
         <div className="absolute top-[25vh] left-[45vw] w-[25vw] h-[25vw] bg-pink-500 dark:bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
         <div className="absolute top-[20vh] left-[25vw] h-[30vw] w-[30vw] bg-blue-500 dark:bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -207,21 +363,295 @@ const Home = () => {
             transform: translate(0px, 0px) scale(1);
           }
         }
+
+        /* Special class for printing to force single page */
+        .printing {
+          height: auto !important;
+          overflow: visible !important;
+        }
+
+        /* Print styles */
+        @media print {
+          /* Preserve colors but ensure good contrast */
+          body {
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+
+          /* Hide decorative elements */
+          .print\\:hidden {
+            display: none !important;
+          }
+
+          /* Hide blog section in print */
+          #blog {
+            display: none !important;
+          }
+
+          /* Page setup - force single continuous page */
+          @page {
+            margin: 0.5in;
+            size: auto;  /* Auto adjusts to content height */
+          }
+
+          /* Force absolute NO page breaks */
+          *, *::before, *::after {
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-before: avoid !important;
+            break-after: avoid !important;
+            break-inside: avoid !important;
+          }
+
+          /* Prevent orphans and widows */
+          p, h1, h2, h3, h4, h5, h6, li {
+            orphans: 999 !important;
+            widows: 999 !important;
+          }
+
+          /* Force single column to prevent layout issues */
+          html, body {
+            column-count: 1 !important;
+          }
+
+          body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100% !important;
+          }
+
+          /* Ensure continuous flow */
+          html, body, #root {
+            height: auto !important;
+            overflow: visible !important;
+            max-width: 100% !important;
+          }
+
+          /* Constrain content width */
+          .max-w-5xl {
+            max-width: 100% !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+          }
+
+          /* Make ALL grids single column for print */
+          .grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+          }
+
+          .grid-cols-1,
+          .grid-cols-2,
+          .md\\:grid-cols-2,
+          .md\\:grid-cols-4 {
+            grid-template-columns: 1fr !important;
+          }
+
+          /* Skills - display inline for better space usage */
+          #skills .grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 1rem !important;
+          }
+
+          #skills .grid > div {
+            flex: 0 0 auto !important;
+            margin-right: 1.5rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          /* Ensure text doesn't overflow */
+          p, li, span, div {
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+          }
+
+          /* Fix links from overflowing - only break long URLs */
+          a[href^="http"] {
+            word-break: break-all !important;
+          }
+
+          /* Skills items should wrap properly */
+          .flex.items-center {
+            flex-wrap: wrap !important;
+          }
+
+          /* Eliminate white space at bottom */
+          body {
+            padding-bottom: 0 !important;
+            margin-bottom: 0 !important;
+          }
+
+          body::after {
+            display: none !important;
+          }
+
+          /* Remove all bottom spacing */
+          .max-w-5xl.mx-auto.px-6.py-16 {
+            padding-bottom: 0 !important;
+          }
+
+          /* Last section should have no bottom margin */
+          section:last-of-type {
+            margin-bottom: 0 !important;
+            padding-bottom: 1rem !important;
+          }
+
+          /* Ensure page ends right after content */
+          html, body, #root {
+            height: auto !important;
+            min-height: unset !important;
+          }
+
+          /* Footer should stick to content */
+          footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+          }
+
+          /* Adjust spacing for print */
+          .print\\:py-2 {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+          }
+
+          .print\\:py-4 {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+          }
+
+          .print\\:space-y-12 > * + * {
+            margin-top: 3rem !important;
+          }
+
+          /* Preserve colored borders with good contrast */
+          .print\\:border-gray {
+            border-color: rgb(156 163 175) !important;
+          }
+
+          .print\\:bg-gray-50 {
+            background-color: rgb(249 250 251) !important;
+          }
+
+          .print\\:ring-blue {
+            --tw-ring-color: rgb(59 130 246) !important;
+          }
+
+          /* Remove gradient from title text in print */
+          .bg-gradient-to-r {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            -webkit-text-fill-color: unset !important;
+            color: rgb(59 130 246) !important; /* Just use blue color */
+          }
+
+          /* Preserve text colors */
+          .text-gray-900 {
+            color: rgb(17 24 39) !important;
+          }
+
+          .text-gray-700 {
+            color: rgb(55 65 81) !important;
+          }
+
+          .text-gray-600 {
+            color: rgb(75 85 99) !important;
+          }
+
+          .text-gray-500 {
+            color: rgb(107 114 128) !important;
+          }
+
+          .text-blue-600 {
+            color: rgb(37 99 235) !important;
+          }
+
+          .text-blue-500 {
+            color: rgb(59 130 246) !important;
+          }
+
+          .text-blue-400 {
+            color: rgb(96 165 250) !important;
+          }
+
+          /* Keep backgrounds subtle */
+          .bg-gray-50 {
+            background-color: rgb(249 250 251) !important;
+          }
+
+          .bg-blue-50 {
+            background-color: rgb(239 246 255) !important;
+          }
+
+          /* Remove shadows for cleaner look */
+          * {
+            box-shadow: none !important;
+          }
+
+          /* Links - don't show URLs for cleaner look */
+          a[href]:after {
+            content: "";
+          }
+
+          /* Ensure images print */
+          img {
+            max-width: 100% !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Prose adjustments for print */
+          .prose {
+            max-width: none !important;
+          }
+
+          /* Hide theme toggle */
+          button[aria-label="Toggle theme"] {
+            display: none !important;
+          }
+
+          /* Card backgrounds */
+          .print\\:p-4 {
+            padding: 1rem !important;
+            background-color: rgb(249 250 251) !important;
+          }
+        }
       `}</style>
 
       {/* Header */}
-      <header className="py-16">
+      <header className="py-8 md:py-12 print:py-4">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight font-display">{data.name}</h1>
-              <p className="text-xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mt-2 font-light">{data.title}</p>
+          <div className="flex flex-col md:flex-row items-center md:items-center gap-6 md:gap-10">
+            {/* Profile Image */}
+            <div className="relative group">
+              {/* Gradient background effect */}
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-30 blur-lg group-hover:opacity-40 transition-opacity print:hidden"></div>
+              {/* Image container - less curved with rounded-3xl */}
+              <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-3xl overflow-hidden ring-2 ring-gray-200/50 dark:ring-gray-700/50 print:ring-blue-400">
+                <img
+                  src={cvImage}
+                  alt={data.name}
+                  className="w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+            {/* Name and Title */}
+            <div className="text-center md:text-left">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight font-display">{data.name}</h1>
+              <p className="text-lg md:text-xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mt-1 font-light">{data.title}</p>
             </div>
           </div>
         </div>
       </header>
 
-      <nav className="sticky top-0 z-50 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border-b border-white/20 dark:border-gray-800/20">
+      <nav className="sticky top-0 z-50 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border-b border-white/20 dark:border-gray-800/20 print:hidden">
         <div className="max-w-5xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <ul className="flex flex-wrap items-center gap-x-8 gap-y-3">
@@ -324,24 +754,34 @@ const Home = () => {
                 </a>
               </li>
             </ul>
-            <button
-              onClick={cycleTheme}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <Sun className="text-yellow-500" size={20} />
-              ) : theme === 'dark' ? (
-                <Moon className="text-blue-400" size={20} />
-              ) : (
-                <Monitor className="text-gray-700 dark:text-gray-300" size={20} />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={exportToPDF}
+                className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium print:hidden"
+                aria-label="Export to PDF"
+              >
+                <Download size={16} />
+                <span className="hidden sm:inline">Export PDF</span>
+              </button>
+              <button
+                onClick={cycleTheme}
+                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {theme === 'light' ? (
+                  <Sun className="text-yellow-500" size={20} />
+                ) : theme === 'dark' ? (
+                  <Moon className="text-blue-400" size={20} />
+                ) : (
+                  <Monitor className="text-gray-700 dark:text-gray-300" size={20} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-16 space-y-24">
+      <div className="max-w-5xl mx-auto px-6 py-16 space-y-24 print:py-8 print:space-y-12">
         {/* About / Professional Summary */}
         <section id="about" ref={addSectionRef('about')} className="relative">
           <div className="absolute top-0 left-0 w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-full -z-10 opacity-70 blur-xl"></div>
@@ -364,7 +804,7 @@ const Home = () => {
 
           <div className="space-y-8">
             {/* Languages */}
-            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300">
+            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300 print:border-gray-300 print:p-4">
               <h3 className="font-medium text-lg mb-4 text-gray-900 dark:text-white flex items-center">
                 <Code weight="bold" className="mr-2 text-blue-500" size={20} />
                 Languages
@@ -380,7 +820,7 @@ const Home = () => {
             </div>
 
             {/* Backend */}
-            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300">
+            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300 print:border-gray-300 print:p-4">
               <h3 className="font-medium text-lg mb-4 text-gray-900 dark:text-white flex items-center">
                 <Code weight="bold" className="mr-2 text-blue-500" size={20} />
                 Backend
@@ -396,7 +836,7 @@ const Home = () => {
             </div>
 
             {/* Frontend */}
-            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300">
+            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300 print:border-gray-300 print:p-4">
               <h3 className="font-medium text-lg mb-4 text-gray-900 dark:text-white flex items-center">
                 <Code weight="bold" className="mr-2 text-blue-500" size={20} />
                 Frontend
@@ -412,7 +852,7 @@ const Home = () => {
             </div>
 
             {/* DevOps */}
-            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300">
+            <div className="bg-white/30 dark:bg-gray-800/30 backdrop-blur-md p-6 rounded-lg border border-white/20 dark:border-gray-700/20 hover:border-blue-100/50 dark:hover:border-blue-900/50 transition-all duration-300 print:border-gray-300 print:p-4">
               <h3 className="font-medium text-lg mb-4 text-gray-900 dark:text-white flex items-center">
                 <Code weight="bold" className="mr-2 text-blue-500" size={20} />
                 DevOps & Infrastructure
@@ -449,7 +889,9 @@ const Home = () => {
                     {job.company}
                   </p>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{job.description}</p>
+                <div className="prose prose-blue dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                  <div dangerouslySetInnerHTML={{ __html: marked(job.description) }} />
+                </div>
               </div>
             ))}
           </div>
@@ -695,7 +1137,7 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <footer className="text-gray-600 dark:text-gray-400 text-center py-8 mt-20">
+      <footer className="text-gray-600 dark:text-gray-400 text-center py-8 mt-20 print:hidden">
         <div className="max-w-5xl mx-auto px-6">
           <p>&copy; {new Date().getFullYear()} {data.name}. All rights reserved.</p>
         </div>

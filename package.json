@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
+    "html2canvas-pro": "^1.5.11",
+    "html2pdf.js": "^0.12.1",
     "js-yaml": "^4.1.0",
+    "jspdf": "^2.5.2",
     "lucide-react": "^0.508.0",
     "marked": "^15.0.11",
     "phosphor-react": "^1.4.1",

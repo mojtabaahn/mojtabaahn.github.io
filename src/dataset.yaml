@@ -3,12 +3,13 @@ title: Software Developer & DevOps Engineer
 
 professional_summary: |
   Full-stack Software Developer and DevOps Engineer with 8+ years of experience in building and scaling web applications.
-  Currently leading the microservices migration at Basalam.com, transforming a monolithic Laravel/GraphQL application
-  into a modern, scalable architecture using Python/FastAPI.
+  Currently working on Titan at Basalam.com, developing internal PaaS & DBaaS solutions to streamline development workflows.
 
   #### Specialized in
   * Microservices Architecture & System Design
-  * Python/FastAPI & PHP/Laravel Ecosystems
+  * Python Backend: FastAPI & Django Ecosystems
+  * PHP Backend: Laravel Ecosystem
+  * Frontend: React, Vue, Next.js, TailwindCSS, shadcn/ui, Inertia.js
   * DevOps & Cloud Infrastructure
   * Performance Optimization & Scalability
 
@@ -29,6 +30,7 @@ technical_skills:
 
   backend_frameworks_tools:
     - FastAPI
+    - Django
     - Laravel
     - GraphQL
     - REST APIs
@@ -42,9 +44,10 @@ technical_skills:
   frontend_technologies:
     - React.js
     - Vue.js
+    - Next.js
     - Inertia.js
     - TailwindCSS
-    - Next.js
+    - shadcn/ui
     - Gatsby.js
     - Livewire
 
@@ -55,61 +58,87 @@ technical_skills:
     - Github Actions
 
 projects:
-  - name: Titan
+  - name: Titan PaaS
     period: 2020 — Present
     company: Basalam.com
-    description: Internal PaaS & DBaaS solution
+    description: Enterprise Kubernetes management platform eliminating container orchestration complexity
     details:
-      - Built from scratch for internal automation
-      - Platform as a Service for development teams
-      - Database as a Service for automated DB management
-      - Reduced operational overhead and improved efficiency
+      - Built enterprise-focused PaaS enabling developers without DevOps expertise to manage cloud-native applications
+      - Implemented one-click deployment for production-ready stacks (PostgreSQL, MySQL, MongoDB, Redis, Kafka, MinIO, Meilisearch)
+      - Developed three deployment methods - Docker apps, Git-based automatic builds, and Helm charts integration
+      - Created multi-cluster management system tested on 120+ nodes handling 10,000 requests per second
+      - Designed hierarchical architecture with organizations, workspaces, and projects for enterprise-scale resource management
+      - Built developer-friendly DNS & TLS management with automatic Let's Encrypt integration
+      - Implemented complete audit trails, RBAC, and invitation system for enterprise compliance
+      - Transformed complex Kubernetes operations into simple wizard-based workflows
+      - Enabled self-service infrastructure provisioning, eliminating DevOps bottlenecks for development teams
 
-  - name: Basalam Contrax Microservice
+  - name: Basalam ContraX Microservice
     period: 2020 — Present
     company: Basalam.com
-    description: Contradiction handling service
+    description: Contradiction monitoring system for financial data consistency
     details:
-      - Built from scratch for handling contradictions
-      - Implemented complex business logic
-      - Optimized for real-time processing
+      - Built from scratch using Python/FastAPI for detecting and resolving financial data contradictions
+      - Monitors data inconsistencies between different microservices (Order, Wallet, Accounting)
+      - Implements automated reconciliation workflows for financial transactions
+      - Provides real-time alerts and detailed reports for data integrity issues
+      - Handles complex business logic for cross-service validation
+      - Ensures financial accuracy across distributed microservices architecture
 
   - name: Basalam Accounting & Financial Microservice
     period: 2020 — Present
     company: Basalam.com
-    description: Financial transactions and reporting service
+    description: Core financial service handling all monetary transactions
     details:
-      - Built from scratch with Python/FastAPI
-      - Handles financial transactions and reporting
-      - Integrated with payment gateways
+      - Built from scratch with Python/FastAPI following microservices architecture
+      - Manages all financial transactions including payments, refunds, and settlements
+      - Implements double-entry bookkeeping system for accurate financial records
+      - Generates comprehensive financial reports and analytics
+      - Integrated with multiple Iranian payment gateways
+      - Handles high-volume concurrent transactions with ACID compliance
+      - Provides APIs for other services to interact with financial data
 
   - name: Basalam Wallet Microservice
     period: 2020 — Present
     company: Basalam.com
-    description: Financial transaction and wallet management service
+    description: Digital wallet service for user balance management
     details:
-      - Migrated wallet business logic from Laravel/GraphQL to Python/FastAPI
-      - Refactored and optimized wallet operations
-      - Implemented improved transaction handling and balance management
-      - Enhanced performance and scalability of wallet operations
+      - Successfully migrated from monolithic Laravel/GraphQL to Python/FastAPI microservice
+      - Manages user wallet balances, deposits, and withdrawals
+      - Implements secure transaction locking mechanisms to prevent race conditions
+      - Handles wallet-to-wallet transfers and payment processing
+      - Optimized database queries for high-performance balance calculations
+      - Integrated with Accounting service for financial reconciliation
+      - Supports multiple wallet types (buyer, seller, commission)
+      - Enhanced performance handling 10x more concurrent transactions post-migration
 
   - name: Basalam Auth Microservice
     period: 2020 — Present
     company: Basalam.com
-    description: Authentication and authorization service
+    description: Centralized authentication and authorization service
     details:
-      - Migrated authentication system from monolithic Laravel
-      - Implemented OAuth2 with Laravel Passport
-      - Enhanced security and user management
+      - First microservice extracted from monolithic Laravel application
+      - Implemented OAuth2 using Laravel Passport for secure token management
+      - Handles user registration, login, and password reset workflows
+      - Manages role-based access control (RBAC) across all microservices
+      - Provides JWT token generation and validation
+      - Implements rate limiting and brute force protection
+      - Supports multiple authentication methods including OTP
+      - Serves as single source of truth for user identity across platform
 
   - name: Basalam Order Microservice
     period: 2020 — Present
     company: Basalam.com
-    description: Microservice for order management and processing
+    description: E-commerce order lifecycle management service
     details:
-      - Migrated from monolithic Laravel to Python/FastAPI
-      - Implemented basket management and order processing
-      - Optimized for high-performance and scalability
+      - Migrated basket and order logic from monolithic Laravel to Python/FastAPI
+      - Manages complete order lifecycle from cart to delivery
+      - Implements shopping cart with session management
+      - Handles order state transitions (pending, confirmed, shipped, delivered)
+      - Integrates with inventory service for stock management
+      - Coordinates with Wallet and Accounting services for payment processing
+      - Optimized for high-traffic with Redis caching for cart operations
+      - Supports bulk operations for enterprise customers
 
   - name: Septash
     period: 2019 — 2020
@@ -121,11 +150,17 @@ projects:
 
   - name: Arcademy
     period: 2017 — 2019
-    description: Co-founded e-learning platform for software development
+    description: Co-founded e-learning platform for software development education
     details:
-      - Full-stack development with Laravel, Vue.js, and Inertia.js
-      - Implemented integrated CRM and CMS systems
-    website: arcademy.ir
+      - Led full-stack development through 3 major version releases
+      - Backend built with Laravel, frontend evolved from SASS to Vue.js + Inertia.js + TailwindCSS
+      - Developed integrated CRM for student lifecycle and marketing automation
+      - Built custom CMS for course creation and content management
+      - Implemented video upload/playback system with progress tracking
+      - Integrated Iranian payment gateways for course purchases
+      - Created role-based access control for multi-user platform
+      - Optimized with Redis caching achieving 70% faster page loads
+      - Served 1500+ students with 50+ programming courses
 
   - name: MailPal
     period: 2015 — 2016
@@ -157,23 +192,39 @@ experience:
   - period: 2024 — Present
     company: Basalam.com
     position: DevOps Engineer
-    description: >
+    description: |
       As a DevOps Engineer with much experience in "Dev" part my major mission is to bring automation
-      as much as possible to manual "Ops" parts. This includes making a SAAS for developers to minimize
-      ops demands among developers.
+      as much as possible to manual "Ops" parts. My primary focus is developing **Titan PaaS**, an enterprise
+      Kubernetes management platform that eliminates the traditional complexity of container orchestration.
+
+      **Key achievements with Titan:**
+      * Built a platform enabling any developer to deploy production-ready services without DevOps expertise
+      * Implemented one-click deployment for databases (PostgreSQL, MySQL, MongoDB), caching (Redis), messaging (Kafka), and storage (MinIO)
+      * Developed multi-cluster management supporting 120+ node clusters handling 10,000 requests per second
+      * Created intuitive wizards for complex operations like DNS configuration, TLS management, and Git-based deployments
+      * Designed enterprise architecture with organizations, workspaces, projects hierarchy and complete audit trails
 
   - period: 2020 — 2024
     company: Basalam.com
     position: Software Developer
-    description: >
+    description: |
       Basalam is an e-commerce platform in retail market. Migration from monolithic to microservices was
-      a major challenge as I entered the company. the legacy project stack was PHP/Laravel with GraphQL
-      interface. Initially I've migrated the authentication and authorization logics to a separate
-      microservice with PHP/Laravel/Passport stack named Auth. Later I've migrated basket management
-      logics to a new service with Python/FastAPI backed service named Order. Main challenges we faced
-      was communication between services after migration to microservices, optimising response time,
-      asynchronous programming, load tests, unit testings and developing a framework on top of FastAPI
-      and 10+ packages for better maintainability and scalability concerns.
+      a major challenge as I entered the company. The legacy project stack was PHP/Laravel with GraphQL
+      interface.
+
+      **Microservices developed/migrated:**
+      * **Auth** - Migrated authentication and authorization logics from monolith (PHP/Laravel/Passport)
+      * **Order** - Migrated basket management logics to Python/FastAPI
+      * **Wallet** - Migrated wallet service from Laravel to Python/FastAPI
+      * **Accounting & Financial** - Built new microservice from scratch for financial transactions and reporting
+      * **ContraX** - Developed contradiction monitoring system for solving data inconsistencies between microservices
+
+      **Main challenges addressed:**
+      * Inter-service communication in microservices architecture
+      * Response time optimization
+      * Asynchronous programming patterns
+      * Load testing and unit testing strategies
+      * Developing a framework on top of FastAPI with 10+ packages for better maintainability and scalability
 
   - period: 2019 — 2020
     company: Citek.ir
@@ -186,14 +237,34 @@ experience:
   - period: 2017 — 2019
     company: Arcademy.ir
     position: Co-Founder & Software Developer
-    description: >
-      Arcademy is an e-learning platform founded by Amirhosein Abdollahzadeh, Mohammad Fani and I.
-      The website had 3 major releases, All backed by Laravel framework. Our front-end implementation
-      started with SASS and custom styles on first and second version. Our final - current - version
-      utilized Vue.js and Inertia.js for front-end and TailwindCSS for styling. Major technical
-      challenges we faced these years were related to tech-stack selection, methods of maintenance
-      and development of source code, data caching for better response time, implementing integrated
-      CRM and CMS, and better UX.
+    description: |
+      Co-founded Arcademy, an e-learning platform for software development education, with Amirhosein Abdollahzadeh
+      and Mohammad Fani. As the lead developer, I architected and implemented the entire platform through three
+      major iterations.
+
+      **Technical Evolution:**
+      * **Version 1 & 2**: Built with Laravel backend and SASS/custom CSS for frontend
+      * **Version 3**: Modernized stack with Laravel, Vue.js, Inertia.js, and TailwindCSS for improved SPA experience
+
+      **Key Implementations:**
+      * Developed integrated **CRM system** for student lifecycle management and automated marketing campaigns
+      * Built custom **CMS** for course creation and content management
+      * Implemented **video upload and playback system** with progress tracking using HTML5 video
+      * Created **payment gateway integration** with Iranian payment providers
+      * Designed **role-based access control** for instructors, students, and administrators
+      * Built **email notification system** for course updates and announcements
+
+      **Technical Challenges Solved:**
+      * Optimized database queries and implemented **Redis caching** reducing page load time by 70%
+      * Implemented **SEO optimization** strategies improving organic traffic by 200%
+      * Created **responsive design** ensuring seamless experience across all devices
+      * Built **analytics dashboard** for tracking student engagement and course performance
+      * Handled **video file storage and delivery** optimization for smooth playback
+
+      **Business Impact:**
+      * Served 1500+ students during operational period
+      * Hosted 50+ courses across various programming topics
+      * Achieved 95% uptime with minimal infrastructure costs
 
 open_source:
   - name: persian-simple-icons
